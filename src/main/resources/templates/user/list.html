@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Quản lý Users</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="page-title">
+                <i class="bi bi-people-fill text-primary"></i> Quản lý Users
+            </h2>
+            <a href="/users/create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Thêm User mới
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Quyền</th>
+                                <th>Trạng thái</th>
+                                <th>Hình ảnh</th>
+                                <th class="text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${users}">
+                                <td>
+                                    <strong th:text="${user.username}"></strong>
+                                </td>
+                                <td th:text="${user.fullname}"></td>
+                                <td>
+                                    <i class="bi bi-envelope"></i>
+                                    <span th:text="${user.email}"></span>
+                                </td>
+                                <td>
+                                    <i class="bi bi-telephone"></i>
+                                    <span th:text="${user.phone} ?: 'Chưa có'"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${user.admin}" class="badge bg-danger">
+                                        <i class="bi bi-shield-fill"></i> Admin
+                                    </span>
+                                    <span th:unless="${user.admin}" class="badge bg-secondary">
+                                        <i class="bi bi-person"></i> User
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:if="${user.active}" class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Hoạt động
+                                    </span>
+                                    <span th:unless="${user.active}" class="badge bg-warning">
+                                        <i class="bi bi-x-circle"></i> Khóa
+                                    </span>
+                                </td>
+                                <td>
+                                    <img th:if="${user.images != null}" 
+                                         th:src="${user.images}" 
+                                         alt="Avatar"
+                                         class="rounded-circle"
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                    <span th:unless="${user.images != null}" class="text-muted">
+                                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{/users/edit/{username}(username=${user.username})}" 
+                                           class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a th:href="@{/users/delete/{username}(username=${user.username})}" 
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Bạn có chắc muốn xóa user này?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div th:if="${#lists.isEmpty(users)}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">Chưa có user nào</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

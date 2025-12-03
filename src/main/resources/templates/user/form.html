@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>User Form</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="mb-4">
+            <h2 class="page-title">
+                <i class="bi bi-person-plus-fill text-primary"></i> 
+                <span th:text="${user.username != null} ? 'Cập nhật User' : 'Thêm User mới'"></span>
+            </h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form th:action="${user.username != null} ? @{/users/edit/{username}(username=${user.username})} : @{/users/create}" 
+                              th:object="${user}" 
+                              method="post">
+                            
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="bi bi-person"></i> Username <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       th:field="*{username}"
+                                       th:readonly="${user.username != null}"
+                                       th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                                       placeholder="Nhập username">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" 
+                                     th:errors="*{username}"></div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-lock"></i> Password <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" 
+                                       class="form-control" 
+                                       th:field="*{password}"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                       placeholder="Nhập mật khẩu">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" 
+                                     th:errors="*{password}"></div>
+                            </div>
+
+                            <!-- Fullname -->
+                            <div class="mb-3">
+                                <label for="fullname" class="form-label">
+                                    <i class="bi bi-person-badge"></i> Họ và tên <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       th:field="*{fullname}"
+                                       th:classappend="${#fields.hasErrors('fullname')} ? 'is-invalid' : ''"
+                                       placeholder="Nhập họ và tên">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('fullname')}" 
+                                     th:errors="*{fullname}"></div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope"></i> Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       th:field="*{email}"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       placeholder="Nhập email">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" 
+                                     th:errors="*{email}"></div>
+                                <div class="invalid-feedback" th:if="${emailError}" th:text="${emailError}"></div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">
+                                    <i class="bi bi-telephone"></i> Số điện thoại
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       th:field="*{phone}"
+                                       placeholder="Nhập số điện thoại">
+                            </div>
+
+                            <!-- Images URL -->
+                            <div class="mb-3">
+                                <label for="images" class="form-label">
+                                    <i class="bi bi-image"></i> URL Hình ảnh
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       th:field="*{images}"
+                                       placeholder="Nhập URL hình ảnh">
+                            </div>
+
+                            <!-- Admin Checkbox -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       th:field="*{admin}"
+                                       id="admin">
+                                <label class="form-check-label" for="admin">
+                                    <i class="bi bi-shield-fill text-danger"></i> Quyền Admin
+                                </label>
+                            </div>
+
+                            <!-- Active Checkbox -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       th:field="*{active}"
+                                       id="active">
+                                <label class="form-check-label" for="active">
+                                    <i class="bi bi-check-circle text-success"></i> Kích hoạt
+                                </label>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex gap-2 justify-content-end mt-4">
+                                <a href="/users" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Hủy
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Lưu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

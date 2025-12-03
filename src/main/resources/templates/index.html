@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Trang chủ</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!-- Welcome Banner -->
+        <div class="card mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-white p-5 text-center">
+                <h1 class="display-4 mb-3">
+                    <i class="bi bi-play-circle-fill"></i> 
+                    Chào mừng đến với Video Management System
+                </h1>
+                <p class="lead">Quản lý videos, categories và users một cách dễ dàng và hiệu quả</p>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle mb-2">Tổng Videos</h6>
+                                <h2 class="card-title mb-0" th:text="${#lists.size(videos)}">0</h2>
+                            </div>
+                            <div>
+                                <i class="bi bi-film" style="font-size: 3rem; opacity: 0.6;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle mb-2">Tổng Categories</h6>
+                                <h2 class="card-title mb-0" th:text="${#lists.size(categories)}">0</h2>
+                            </div>
+                            <div>
+                                <i class="bi bi-folder-fill" style="font-size: 3rem; opacity: 0.6;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle mb-2">Videos Hoạt động</h6>
+                                <h2 class="card-title mb-0" 
+                                    th:text="${videos.?[active == true].size()}">0</h2>
+                            </div>
+                            <div>
+                                <i class="bi bi-check-circle-fill" style="font-size: 3rem; opacity: 0.6;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Videos -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-star-fill text-warning"></i> 
+                    Top Videos Xem Nhiều Nhất
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4" th:each="video, iterStat : ${videos}" th:if="${iterStat.index < 6}">
+                        <div class="card h-100 shadow-sm">
+                            <img th:if="${video.poster != null}" 
+                                 th:src="${video.poster}" 
+                                 class="card-img-top" 
+                                 alt="Video Poster"
+                                 style="height: 180px; object-fit: cover;">
+                            <div th:unless="${video.poster != null}" 
+                                 class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
+                                 style="height: 180px;">
+                                <i class="bi bi-film text-white" style="font-size: 3rem;"></i>
+                            </div>
+                            
+                            <div class="card-body">
+                                <h6 class="card-title" th:text="${video.title}"></h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-folder"></i>
+                                        <span th:text="${video.category.categoryname}"></span>
+                                    </small>
+                                    <span class="badge bg-info">
+                                        <i class="bi bi-eye"></i>
+                                        <span th:text="${video.views}"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent">
+                                <a th:href="@{/videos/view/{id}(id=${video.videoId})}" 
+                                   class="btn btn-sm btn-primary w-100">
+                                    <i class="bi bi-play-circle"></i> Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div th:if="${#lists.isEmpty(videos)}" class="col-12 text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                        <p class="text-muted mt-3">Chưa có video nào</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-folder-fill text-primary"></i> 
+                    Danh mục Categories
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3" th:each="category : ${categories}">
+                        <div class="card text-center h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <img th:if="${category.images != null}" 
+                                         th:src="${category.images}" 
+                                         alt="Category"
+                                         class="rounded"
+                                         style="width: 80px; height: 80px; object-fit: cover;">
+                                    <i th:unless="${category.images != null}" 
+                                       class="bi bi-folder-fill text-warning" 
+                                       style="font-size: 3rem;"></i>
+                                </div>
+                                <h6 class="card-title" th:text="${category.categoryname}"></h6>
+                                <p class="text-muted small mb-3">
+                                    <i class="bi bi-film"></i>
+                                    <span th:text="${category.videos != null ? #lists.size(category.videos) : 0}"></span> videos
+                                </p>
+                                <a th:href="@{/videos(categoryId=${category.categoryId})}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-arrow-right"></i> Xem videos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div th:if="${#lists.isEmpty(categories)}" class="col-12 text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                        <p class="text-muted mt-3">Chưa có category nào</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
