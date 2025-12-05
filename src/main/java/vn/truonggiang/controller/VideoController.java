@@ -38,6 +38,12 @@ public class VideoController {
         return "video/list";
     }
     
+    // AJAX Page
+    @GetMapping("/ajax")
+    public String ajaxPage(Model model) {
+        return "video/ajax";
+    }
+    
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("video", new Video());

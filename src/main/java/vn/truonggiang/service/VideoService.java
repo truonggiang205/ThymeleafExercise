@@ -1,6 +1,8 @@
 package vn.truonggiang.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.truonggiang.entity.Video;
 import vn.truonggiang.repository.VideoRepository;
@@ -53,5 +55,18 @@ public class VideoService {
             video.setViews(video.getViews() + 1);
             videoRepository.save(video);
         }
+    }
+    
+    // Pagination methods
+    public Page<Video> findAllPaginated(Pageable pageable) {
+        return videoRepository.findAll(pageable);
+    }
+    
+    public Page<Video> searchByTitle(String keyword, Pageable pageable) {
+        return videoRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+    }
+    
+    public Page<Video> findByCategoryId(Integer categoryId, Pageable pageable) {
+        return videoRepository.findByCategoryCategoryId(categoryId, pageable);
     }
 }

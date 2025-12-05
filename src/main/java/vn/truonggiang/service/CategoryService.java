@@ -1,6 +1,8 @@
 package vn.truonggiang.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.truonggiang.entity.Category;
 import vn.truonggiang.repository.CategoryRepository;
@@ -36,5 +38,14 @@ public class CategoryService {
     
     public List<Category> search(String keyword) {
         return categoryRepository.findByCategorynameContainingIgnoreCase(keyword);
+    }
+    
+    // Pagination methods
+    public Page<Category> findAllPaginated(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+    
+    public Page<Category> searchWithPagination(String keyword, Pageable pageable) {
+        return categoryRepository.findByCategorynameContainingIgnoreCase(keyword, pageable);
     }
 }
